@@ -1,17 +1,18 @@
 ---
 author: Port OS Team
-last modified: 2026, october, 15
-title: Events, capabilities and messages
+last modified: 2026, october, 20
+title: Send commands to an endpoint and read its events
+slug: how-to-use-events-capabilities-and-messages
 description: Use this guide to understand events, capabilities and messages, and how a device state change reaches you.
 guide-id: events-and-capabilities
 content-authorship: HUMAN_MIXED_WITH_AI
 ---
 
-# Events, capabilities and messages
+# How to send commands to an endpoint and read its events
 
 Find out what an endpoint can do, send it a supported command, and read what it reports back. You will use the same messages to control an endpoint and to learn when something happens to it.
 
-## Inspect the endpoint contract
+## Messages
 
 To control an endpoint, or to learn when something has happened to it, you handle messages.
 
@@ -21,11 +22,13 @@ You send a message to an endpoint to control it. You receive a message from an e
 
 An endpoint tells you what it can do by declaring capabilities.
 
-A capability defines a set of messages that an endpoint can send or receive. 
+A capability defines a set of messages that an endpoint can send or receive.
 
 A capability namespace such as `port1/systems/zero/capability-interfaces/power` tells you that the endpoint can support power controls. Read the [capability reference](https://portoperatingsystem.com/docs/reference/capabilities/) for the messages each capability defines.
 
 To find out which messages an endpoint supports, look at the capabilities it declares. See the [API reference](https://portoperatingsystem.com/api/) for how to list an endpoint and its capabilities.
+
+An endpoint can declare a subset of a capability's messages. A declared subset limits which commands are available, so do not assume that every message in a capability works on every endpoint. An omitted subset uses the versioned capability contract. An explicitly empty subset advertises no messages.
 
 ## Send a message
 

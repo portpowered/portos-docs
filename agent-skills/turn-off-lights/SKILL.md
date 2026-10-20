@@ -1,6 +1,6 @@
 ---
 name: turn-off-lights
-description: "Use this guide when the customer wants to turn lights off or on, or to check whether lights are on. It covers finding the right lights, telling lights from switches and plugs, and fixing device data that confuses customers."
+description: "Use this guide to turn lights off or on, or to check whether lights are on. It covers finding the right lights, telling lights from switches and plugs, and fixing device data that causes confusion."
 ---
 
 # How to turn off your lights
@@ -11,40 +11,40 @@ description: "Use this guide when the customer wants to turn lights off or on, o
 
 ## Before you start: what does "all lights" mean?
 
-"All lights", "the lights" and "lights" depend on the customer's habits. Common meanings:
+"All lights", "the lights" and "lights" depend on your habits. Common meanings:
 
-1. Turn off every light the customer owns.
-2. Turn off the lights in the room the customer is in.
-3. Turn off every light in a group the customer named "all lights".
+1. Turn off every light you own.
+2. Turn off the lights in the room you are in.
+3. Turn off every light in a group you named "all lights".
 4. Turn off every light, switch and plug in one group, such as the main house, and leave the other groups alone.
 
-Ask the customer what they mean the first time, and remember the answer. If you cannot ask, make a best effort: turn off every endpoint with the `LIGHT` type. This does not always work, because customers sometimes misjudge their own homes.
+Decide which of these you mean, and use the same meaning each time. If you are unsure, start with every endpoint of the `LIGHT` type. That is not always right, because some lamps are plugged into a switch or plug instead.
 
 ## Lights, switches and plugs
 
-Start with authorized endpoint discovery and inspect each endpoint's capability declarations. A room name can be ambiguous, so select by full ID and group path, or ask the customer. A plug or switch that supports power is not automatically a light.
+Start with authorized endpoint discovery and inspect each endpoint's capability declarations. A room name can be ambiguous, so select by full ID and group path, or name the room yourself. A plug or switch that supports power is not automatically a light.
 
-Sometimes "turn off the lights" means turning off a plug or switch that a lamp is connected to. When you search for an endpoint, check plugs and switches as well as lights, and confirm with the customer before you switch one off.
+Sometimes "turn off the lights" means turning off a plug or switch that a lamp is connected to. When you search for an endpoint, check plugs and switches as well as lights, and check that it is the lamp you mean before you switch it off.
 
 ## Lights in someone else's home
 
-The lights may belong to someone else who shared them with the customer, for example when the customer is house sitting or staying in a rented home. Shared endpoints are not included by default. Add an explicit owner, endpoint ID or group selector to include them.
+The lights may belong to someone else who shared them with you, for example when you are house sitting or staying in a rented home. Shared endpoints are not included by default. Add an explicit owner, endpoint ID or group selector to include them.
 
 ## Fix confusing data
 
-Fix the data so customers do not get confused. For example, change a plug that powers a lamp to the `LIGHT` type. If a device does not work, disable it so that it stops appearing in default results.
+Fix the data so that your devices are easy to recognize. For example, change a plug that powers a lamp to the `LIGHT` type. If a device does not work, disable it so that it stops appearing in default results.
 
 ## Use MCP
 
-Connect your AI client with the steps in [How to use MCP](https://portoperatingsystem.com/docs/how-to-use-mcp/). Then use these tools:
+Connect your AI client with the steps in [How to use MCP](https://portoperatingsystem.com/docs/how-to-use-mcp/). Then ask your assistant to do the work, or call these tools directly:
 
 - `endpoint_query` lists devices. It returns each device's type, capabilities and message IDs. Call it without a `query` to load everything, or narrow it with a type filter such as `{"type": {"eq": "LIGHT"}}`. Pass the returned `nextToken` back until none is returned. Ask for `expand: ["power"]` to read power state, and add `forceDeviceAttributeQuery: true` to read it from the device instead of the cache.
 - `group_query` lists groups, their parent path, child groups and members. Use it to resolve a room to a full group ID.
 - `control` sends a command. Copy `id` and `message` from the query results, for example the `turn-off` message of the power capability, and send `payload: {}`.
-- `endpoint_manage` repairs data. Its operations are `RENAME`, `SET_TYPE`, `SET_ENABLEMENT`, `MERGE_INTO` and `DELETE`. Copy the full endpoint ID from `endpoint_query`, and explain the effect to the customer before you merge or delete.
+- `endpoint_manage` repairs data. Its operations are `RENAME`, `SET_TYPE`, `SET_ENABLEMENT`, `MERGE_INTO` and `DELETE`. Copy the full endpoint ID from `endpoint_query`, and understand the effect before you merge or delete.
 - `group_manage` creates, renames, merges and deletes groups, and changes their members.
 
-Report which lights you selected, which commands were accepted, and which failed.
+Check the results to see which lights were selected, which commands were accepted, and which failed.
 
 ## Use the HTTP API
 

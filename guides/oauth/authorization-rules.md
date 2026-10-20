@@ -1,13 +1,13 @@
 ---
 author: Port OS Team
-last modified: 2026, october, 14
-title: Scopes and authorization rules
+last modified: 2026, october, 20
+title: Set up access rules for Port OS
 description: Use this guide to choose scopes and understand which resource permissions a request needs.
 guide-id: authorization-rules
 content-authorship: HUMAN_MIXED_WITH_AI
 ---
 
-# Scopes and authorization rules
+# Set up access rules for Port OS
 
 Authentication establishes the principal and client. OAuth scopes bound the user's delegated authority; resource rules decide which selected resources and actions that principal may access. A scope is not an ownership or sharing grant.
 

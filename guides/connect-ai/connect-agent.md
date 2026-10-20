@@ -19,7 +19,7 @@ Copy this prompt into a client that can retrieve public documents:
 
 | Component | Input | Result |
 | --- | --- | --- |
-| [Discovery and transport](/docs/for-ai/guides/oauth-discovery.md) | Public API/MCP URL | Canonical issuer, endpoints and REST/MCP resource |
+| [Discovery and transport](/docs/for-ai/guides/oauth-discovery.md) | Public API/MCP URL | The sign-in server address, its endpoints, and the REST and MCP resource URLs |
 | [DCR or CIMD registration](/docs/for-ai/guides/oauth-client-registration.md) | Client-supported method and controlled callback | Client identity and accepted profile, without device access |
 | [User consent and callback](/docs/for-ai/guides/oauth-consent-and-callback.md) | Client ID, callback, resource and least scopes | Validated one-use authorization code |
 | [Token lifecycle](/docs/for-ai/guides/oauth-token-lifecycle.md) | Code and original PKCE verifier | Scoped access, refresh rotation and revocation |

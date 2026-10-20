@@ -52,8 +52,8 @@ Use these operations to manage subscriptions from your own application. Each one
 | --- | --- | --- |
 | `enumerateSubscriptions` | `GET /subscriptions` | Lists subscriptions, or reads one when you pass `id`. |
 | `upsertSubscription` | `POST /subscriptions` | Creates or updates a subscription. A subscription has a `query` that selects events and a `target` that receives them. |
-| `patchSubscription` | `PATCH` on the subscription | Renames a subscription. |
-| `deleteSubscription` | `DELETE` on the subscription | Stops a subscription. |
+| `patchSubscription` | `PATCH /{namespace}/{principalType}/{principalId}/subscriptions/{subscriptionId}` | Renames a subscription. |
+| `deleteSubscription` | `DELETE /{namespace}/{principalType}/{principalId}/subscriptions/{subscriptionId}` | Stops a subscription. |
 
 A subscription can include a `context` filter. Each key is a path into the message, such as `header.namespace` or `header.name`, and each value is what the message must contain. A subscription fires only when every entry matches. Leave `context` out to receive every event.
 
