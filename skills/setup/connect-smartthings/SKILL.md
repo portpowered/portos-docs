@@ -8,7 +8,7 @@ metadata:
   capabilities: power
   content-authorship: HUMAN_MIXED_WITH_AI
   author: Port OS Team
-  last modified: 2026, october, 20
+  last modified: 2026, october, 21
 ---
 
 # Connect SmartThings
@@ -22,19 +22,51 @@ The website flow saves first, then authorizes: you save the client ID and secret
 
 ## Use your own SmartThings app [#customer-oauth]
 
-1. Install the [SmartThings CLI](https://developer.smartthings.com/docs/sdks/cli) and sign in.
-2. In Port OS, open the SmartThings connect screen and choose the option to use your own SmartThings app. Copy the Redirect URI it shows.
-   <!-- screenshot: smartthings-portos-connect-redirect -->
-3. Run `smartthings apps:create` and choose "OAuth-In App" when asked for the app type.
-   <!-- screenshot: smartthings-cli-apps-create -->
-4. Enter the Redirect URI from step 2, and select the scopes listed below.
-   <!-- screenshot: smartthings-cli-scopes -->
-5. Copy the OAuth client ID and client secret the CLI prints. The secret is shown once.
-   <!-- screenshot: smartthings-cli-credentials -->
-6. In Port OS, paste the client ID and client secret and choose Save. This creates a draft; the secret is stored on the backend and never shown again.
-   <!-- screenshot: smartthings-portos-save-credentials -->
-7. Choose Authorize. SmartThings asks you to choose a location and approve access; approve it. Port OS then shows SmartThings as connected.
-   <!-- screenshot: smartthings-consent -->
+You register an OAuth-In app with the SmartThings CLI, then give Port OS its client ID and client secret.
+
+### 1. Install the SmartThings CLI
+
+On macOS, run:
+
+```bash
+brew install smartthingscommunity/smartthings/smartthings
+```
+
+On Windows, download and run `smartthings.msi` from the latest release listed on the [SmartThings CLI page](https://developer.smartthings.com/docs/sdks/cli). On Linux, download the zipped binary from the latest release, extract it and put it on your path. Check the install:
+
+```bash
+smartthings --version
+```
+
+### 2. Copy the Redirect URI from Port OS
+
+In Port OS, open **Add a device** and choose SmartThings. Under **How do you want to connect SmartThings?**, choose **Use my own app**. Copy the value under **Redirect URI to register in your SmartThings app** with **Copy redirect URI**. Keep this tab open; you return to it in step 6.
+
+### 3. Create the app
+
+Run:
+
+```bash
+smartthings apps:create
+```
+
+On the first command, the CLI opens a browser window. Sign in with your Samsung account and grant the CLI access. When asked for the app type, choose **OAuth-In App**.
+
+### 4. Enter the Redirect URI and scopes
+
+When the CLI asks for the redirect URI, paste the value from step 2. When it asks for scopes, select the four scopes listed under Required scopes.
+
+### 5. Copy the client ID and client secret
+
+The CLI prints the app's OAuth client ID and client secret. The secret is shown once, so copy both now. Treat the secret like a password.
+
+### 6. Enter the credentials in Port OS
+
+Back in Port OS, enter the client ID in **OAuth client ID** and the secret in **OAuth client secret**, then click **Connect SmartThings**. Port OS stores the secret on the backend and never shows it again.
+
+### 7. Approve access on SmartThings
+
+SmartThings asks you to sign in, choose a location and approve access. Approve it. Port OS then shows SmartThings as connected and lists your devices.
 
 ### Redirect URI
 
@@ -54,9 +86,7 @@ Select these scopes when you register the app:
 If your account has been granted Port OS's SmartThings registration, the connect screen offers a Port OS registration option. You do not register an app or enter a client ID, secret or Redirect URI.
 
 1. Open the SmartThings connect screen and choose the Port OS registration option.
-   <!-- screenshot: smartthings-portos-oauth-choice -->
 2. Choose Authorize and approve the requested access on SmartThings.
-   <!-- screenshot: smartthings-portos-oauth-consent -->
 
 If the option is missing, your account has not been granted access. Use your own SmartThings app instead.
 

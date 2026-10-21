@@ -27,7 +27,7 @@ catalog; keep HTML in your accepted formats for that request. Both variants
 include `Vary: Accept` for caches. The direct compact Markdown URL works on both
 the website and API host and does not depend on negotiation.
 
-Enumerate endpoints with endpoint:read. Follow returned pagination links/tokens exactly and stop only when continuation is absent. Inspect declared capabilities and versions; retrieve one message/attribute schema as needed. Send messages through POST /messages (the existing /messages/send alias also works). Never invent target IDs or message fields.
+Enumerate endpoints with endpoint:read. Follow returned pagination links/tokens exactly and stop only when continuation is absent. Inspect declared capabilities and versions; retrieve one message/attribute schema as needed. Send messages through POST /messages (the existing /messages alias also works). Never invent target IDs or message fields.
 
 POST /endpoint-query with `{}` defaults to the caller's enabled endpoints, as do type and capability filters. An explicit owner, endpoint ID, or authorized group selector can include readable shared endpoints. Its query accepts exact match and nested and/or/not predicates; read the request schema's supported fields rather than inventing comparisons or text search. A groupId predicate additionally needs group:read and access to that group. Keep the query, page size, expansions, forceDeviceQuery setting and grant unchanged while following paginationContext.nextToken. Empty pages can have a continuation. Cursors expire after fifteen minutes; restart without nextToken on a 400 cursor error.
 

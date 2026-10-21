@@ -8,7 +8,7 @@ metadata:
   capabilities: thermostat temperature-sensor camera
   content-authorship: HUMAN_MIXED_WITH_AI
   author: Port OS Team
-  last modified: 2026, october, 20
+  last modified: 2026, october, 21
 ---
 
 # Connect Google Nest
@@ -22,24 +22,87 @@ The website flow saves first, then authorizes: you save your values as a draft c
 
 ## Your own Google Cloud client [#customer-oauth]
 
-1. In the [Google Cloud console](https://console.cloud.google.com), create or select a project, then open APIs and Services, Credentials.
-   <!-- screenshot: nest-gcp-credentials -->
-2. Choose Create credentials, OAuth client ID, and set the application type to Web application.
-   <!-- screenshot: nest-gcp-create-oauth-client -->
-3. In Port OS, open the Google Nest connect screen and choose the option to use your own Google Cloud client. Copy the Redirect URI it shows.
-   <!-- screenshot: nest-portos-connect-redirect -->
-4. Paste that value into the OAuth client's Authorized redirect URIs and save. It must exactly match the value the connect screen shows.
-   <!-- screenshot: nest-gcp-redirect-uri -->
-5. Copy the OAuth client ID and client secret.
-   <!-- screenshot: nest-gcp-client-credentials -->
-6. In the [Device Access console](https://console.nest.google.com/device-access), create a project. Google charges a one-time US$5 registration fee for Device Access; see Google's Device Access console for current terms. When asked for an OAuth client ID, enter the client ID from step 5, which links the OAuth client to the project.
-   <!-- screenshot: nest-device-access-create-project -->
-7. Copy the Device Access project ID from the project page.
-   <!-- screenshot: nest-device-access-project-id -->
-8. In Port OS, paste the client ID, the client secret and the Device Access project ID, and choose Save. This creates a draft; the secret is stored on the backend and never shown again.
-   <!-- screenshot: nest-portos-save-credentials -->
-9. Choose Authorize. Google asks you to approve access to your Nest devices; approve it. Port OS then lists your devices and shows Nest as connected.
-   <!-- screenshot: nest-consent -->
+You need a personal Google account (a Google Workspace account cannot register for Device Access) that owns a Nest home with a supported thermostat, camera or doorbell. The work has two parts: an OAuth client in Google Cloud, then a Device Access project that links to it.
+
+### 1. Copy the Redirect URI from Port OS
+
+In Port OS, open **Add a device** and choose Google Nest. Under **How do you want to connect Google Nest?**, choose **Use my own app**. Copy the value under **Redirect URI to register in your Google Nest app** with **Copy redirect URI**. Keep this tab open; you return to it in step 12. The value is `https://auth.portoperatingsystem.com/plugins`; the screen is the source of truth.
+
+### 2. Open Google Auth Platform
+
+In the [Google Cloud console](https://console.cloud.google.com), select a project you own or create one, and enable the **Smart Device Management API** for it. Then open **Google Auth Platform** and click **Get started**.
+
+[![Google Auth Platform overview with the Get started button](/guides/nest/01-auth-platform-get-started.webp)](/guides/nest/01-auth-platform-get-started.webp)
+
+### 3. Name the app
+
+Enter an app name, for example **Port OS Nest**, and choose a user support email from the list. Click **Next**.
+
+[![The App Information step with the app name filled in and the user support email list](/guides/nest/02-app-information.webp)](/guides/nest/02-app-information.webp)
+
+### 4. Choose External
+
+Under **Audience**, choose **External**. The app starts in testing mode, which is all Port OS needs; you do not need to publish it.
+
+[![The Audience step with External selected](/guides/nest/02b-audience-external.webp)](/guides/nest/02b-audience-external.webp)
+
+### 5. Finish the consent screen
+
+Enter a contact email, agree to the Google API Services user data policy, then click **Create**.
+
+### 6. Add yourself as a test user
+
+Open **Audience** and, under **Test users**, click **Add users**. Add the Google account that owns your Nest home. While the app is in testing mode, only test users can sign in.
+
+[![The Audience page with the Add users button under Test users](/guides/nest/03-audience-test-users.webp)](/guides/nest/03-audience-test-users.webp)
+
+### 7. Create the OAuth client
+
+Open **Clients** and click **Create client**. Set **Application type** to **Web application** and enter a name. Under **Authorized redirect URIs**, click **Add URI** and paste the Redirect URI from step 1. Click **Create**.
+
+[![The Create OAuth client ID form with Web application selected and the Port OS redirect URI entered](/guides/nest/04-oauth-client-web-redirect.webp)](/guides/nest/04-oauth-client-web-redirect.webp)
+
+### 8. Copy the client ID and client secret
+
+Google shows the new client ID and secret. Copy both now: the dialog does not show the secret again. You can add a new secret later from the client's page. Treat the secret like a password.
+
+[![The OAuth client created dialog; the client ID is hidden in this example and the secret area is cropped out](/guides/nest/05-client-created-id.webp)](/guides/nest/05-client-created-id.webp)
+
+### 9. Register for Device Access
+
+Open the [Device Access console](https://console.nest.google.com/device-access) and sign in with the same Google account. Google charges a one-time US$5 registration fee per Google account, and you accept its terms, before you can create a project.
+
+### 10. Create a Device Access project
+
+Click **Create project**.
+
+[![The Device Access console Your projects page with the Create project card](/guides/nest/06-device-access-projects.webp)](/guides/nest/06-device-access-projects.webp)
+
+Enter a project name. Google shows this name on its consent screen. Click **Next**.
+
+[![Step 1 of 3, the project name](/guides/nest/07-project-name.webp)](/guides/nest/07-project-name.webp)
+
+Paste the OAuth client ID from step 8 and click **Next**. This links the client to the project, and each client ID can belong to one project only.
+
+[![Step 2 of 3, the OAuth client ID field; the client ID is hidden in this example](/guides/nest/08-project-oauth-client-id.webp)](/guides/nest/08-project-oauth-client-id.webp)
+
+Leave **Enable events** off and click **Create project**. Port OS does not use Nest events on this connection.
+
+[![Step 3 of 3, Events, with Enable events off](/guides/nest/09-project-events-off.webp)](/guides/nest/09-project-events-off.webp)
+
+### 11. Copy the Project ID
+
+The project page shows a **Project ID**, a UUID. This is not your Google Cloud project ID. Copy it.
+
+[![The project page with the Project ID under the project name; the ID is hidden in this example](/guides/nest/10-project-created.webp)](/guides/nest/10-project-created.webp)
+
+### 12. Enter the values in Port OS
+
+Back in Port OS, enter the client ID in **OAuth client ID**, the client secret in **OAuth client secret** and the Project ID in **Device Access project ID**. Click **Connect Google Nest**. Port OS stores the secret on the backend and never shows it again.
+
+### 13. Approve access on Google
+
+Google asks you to choose your Nest home and approve access to your devices. Sign in with a test user from step 6 and approve. Port OS then lists your devices and shows Nest as connected.
 
 ### What works on this variant
 
@@ -56,9 +119,7 @@ The Authorized redirect URI in Google Cloud must match the value the Port OS con
 If your account has been granted Port OS's Nest client, the connect screen offers a Port OS client option. You do not create a Google Cloud client or a Device Access project. Live events are included.
 
 1. Open the Google Nest connect screen and choose the Port OS client option.
-   <!-- screenshot: nest-portos-oauth-choice -->
 2. Choose Authorize and approve the requested access on Google.
-   <!-- screenshot: nest-portos-oauth-consent -->
 
 If the option is missing, your account has not been granted access. Use your own Google Cloud client instead.
 

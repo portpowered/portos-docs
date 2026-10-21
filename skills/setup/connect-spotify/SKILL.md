@@ -8,7 +8,7 @@ metadata:
   capabilities: media-player media-playlist media-search
   content-authorship: HUMAN_MIXED_WITH_AI
   author: Port OS Team
-  last modified: 2026, october, 19
+  last modified: 2026, october, 21
 ---
 
 # Connect Spotify
@@ -22,20 +22,55 @@ The website flow saves first, then authorizes: you save the client ID and secret
 
 ## Use your own Spotify app [#customer-oauth]
 
-1. Sign in to the [Spotify developer dashboard](https://developer.spotify.com/dashboard) and choose Create app.
-   <!-- screenshot: spotify-dashboard-create-app -->
-2. Give the app a name and description. For APIs used, select Web API.
-   <!-- screenshot: spotify-dashboard-app-details -->
-3. In Port OS, open the Spotify connect screen and choose Use my own Spotify app. Copy the Redirect URI it shows.
-   <!-- screenshot: spotify-portos-connect-redirect -->
-4. Paste that value into the app's Redirect URIs in the dashboard and save.
-   <!-- screenshot: spotify-dashboard-redirect-uri -->
-5. Open the app's settings in the dashboard and copy the client ID and the client secret.
-   <!-- screenshot: spotify-dashboard-credentials -->
-6. In Port OS, paste the client ID and client secret and choose Save. This creates a draft; the secret is stored on the backend and never shown again.
-   <!-- screenshot: spotify-portos-save-credentials -->
-7. Choose Authorize. Spotify asks you to approve the requested access; approve it. Port OS then shows Spotify as connected.
-   <!-- screenshot: spotify-consent -->
+You create an app in the Spotify developer dashboard, then give Port OS its client ID and client secret. You need a Spotify account.
+
+### 1. Copy the Redirect URI from Port OS
+
+In Port OS, open **Add a device** and choose Spotify. Under **How do you want to connect Spotify?**, choose **Use my own app**. Copy the value under **Redirect URI to register in your Spotify app** with **Copy redirect URI**. Keep this tab open; you come back to it in step 8. The value is `https://auth.portoperatingsystem.com/plugins`; the screen is the source of truth.
+
+### 2. Create an app in the Spotify dashboard
+
+Sign in to the [Spotify developer dashboard](https://developer.spotify.com/dashboard) and click **Create app**.
+
+[![Spotify for Developers dashboard with the Create app button](/guides/spotify/01-dashboard.webp)](/guides/spotify/01-dashboard.webp)
+
+### 3. Name the app
+
+Enter an app name and a description. Anything works, for example **Port OS** and **Connects my Spotify account to Port OS**. The website field is optional.
+
+[![The Spotify Create app form with the app name and description filled in](/guides/spotify/02-create-app-form.webp)](/guides/spotify/02-create-app-form.webp)
+
+### 4. Add the Redirect URI and choose Web API
+
+Paste the Redirect URI from step 1 into **Redirect URIs** and click **Add**. Under **Which API/SDKs are you planning to use?**, tick **Web API**.
+
+[![The Redirect URIs list showing the Port OS redirect URI, with Web API ticked](/guides/spotify/03-redirect-and-web-api.webp)](/guides/spotify/03-redirect-and-web-api.webp)
+
+### 5. Accept the terms and save
+
+Tick the box to accept Spotify's Developer Terms of Service and Design Guidelines, then click **Save**.
+
+[![The terms checkbox ticked and the Save button](/guides/spotify/04-terms-and-save.webp)](/guides/spotify/04-terms-and-save.webp)
+
+### 6. Copy the client ID and client secret
+
+The app opens on **Basic Information**. Copy the **Client ID**. Then click **View client secret** and copy the secret. Treat the secret like a password: do not paste it into chat, a document or a screenshot.
+
+[![App settings showing the Client ID field and the View client secret link; the client ID is hidden in this example](/guides/spotify/05-client-id.webp)](/guides/spotify/05-client-id.webp)
+
+### 7. Add the Spotify accounts that will connect
+
+New apps start in **Development mode**, which only lets accounts you add sign in. Open the **User Management** tab, enter the name and email of each Spotify account that will connect, and click **Add user**. A development-mode app accepts up to five users. Add the account you will sign in with in step 9.
+
+[![The User Management tab with the Full Name and Email fields and the Add user button](/guides/spotify/06-user-management.webp)](/guides/spotify/06-user-management.webp)
+
+### 8. Enter the credentials in Port OS
+
+Back in Port OS, paste the client ID into **OAuth client ID** and the client secret into **OAuth client secret**, then click **Connect Spotify**. Port OS stores the secret on the backend and never shows it again.
+
+### 9. Approve access on Spotify
+
+Spotify opens and asks you to approve the access Port OS requests (see Required scopes). Sign in with an account you added in step 7, then approve the request. Port OS then shows Spotify as connected, and your playlists and playback devices become available.
 
 ### Redirect URI
 
@@ -56,16 +91,14 @@ Port OS requests these scopes. You do not configure scopes in the dashboard; app
 
 ### Quota and development mode
 
-New Spotify apps start in development mode. Under Spotify's July 2026 update, only users on the app's allowlist can sign in until Spotify grants the app extended quota. Add every Spotify account you want to connect to the allowlist in the dashboard (User Management). Quota limits are counted by Spotify, not Port OS; see Spotify's [quota modes](https://developer.spotify.com/documentation/web-api/concepts/quota-modes) and the [July 2026 Web API quota update](https://developer.spotify.com/blog/2026-07-23-web-api-quota-updates) for current limits.
+New Spotify apps start in development mode. Under Spotify's July 2026 update, only users on the app's allowlist can sign in until Spotify grants the app extended quota. Quota limits are counted by Spotify, not Port OS; see Spotify's [quota modes](https://developer.spotify.com/documentation/web-api/concepts/quota-modes) and the [July 2026 Web API quota update](https://developer.spotify.com/blog/2026-07-23-web-api-quota-updates) for current limits.
 
 ## Use Port OS's registration [#portos-oauth]
 
 If your account has been granted Port OS's Spotify registration, the connect screen offers Use Port OS's Spotify app. You do not create a dashboard app or enter a client ID, secret or Redirect URI.
 
 1. Open the Spotify connect screen and choose Use Port OS's Spotify app.
-   <!-- screenshot: spotify-portos-oauth-choice -->
 2. Choose Authorize and approve the requested access on Spotify.
-   <!-- screenshot: spotify-portos-oauth-consent -->
 
 If the option is missing, your account has not been granted access. Use your own Spotify app instead.
 
