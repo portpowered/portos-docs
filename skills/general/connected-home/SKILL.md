@@ -1,12 +1,12 @@
 ---
 name: connected-home
-description: Use for connected-device requests such as turning off lights or a room switch, lowering the thermostat temperature, checking the temperature right now, vacuuming a room, playing or pausing music on Echo/Alexa, lowering speaker volume, looking at a kitchen camera, finding or pinging a phone, or checking whether a phone/watch is dead or needs charging. For a bare temperature question with no indoor/outdoor context, clarify which before assuming weather. Explicit weather forecasts or city temperatures do not require this workflow.
+description: Use for connected-device requests such as turning off lights or a room switch, lowering the thermostat temperature, checking the temperature right now, vacuuming a room, playing or pausing music on Echo/Alexa, lowering speaker volume, looking at a kitchen camera, finding or pinging a phone, or checking whether a phone/watch is dead or needs charging, locks and doorbells, the fridge or oven, air quality and door/motion sensors, finding a wallet or laptop tracker, iCloud Drive files, AI image or music generation, and reminders or calendars. For a bare temperature question with no indoor/outdoor context, clarify which before assuming weather. Explicit weather forecasts or city temperatures do not require this workflow.
 metadata:
   title: Connected home requests
   guide-id: skill-connected-home
   content-authorship: HUMAN_MIXED_WITH_AI
   author: Port OS Team
-  last modified: 2026, october, 20
+  last modified: 2026, october, 22
 ---
 
 # Connected home requests
@@ -26,6 +26,16 @@ These are the same Markdown guides published on the website and exposed as MCP
 resources at portos://guides/{topic}. When references are unavailable, read
 portos://guides/index with resources/read. The guides explain capability selection,
 documented payload fields, verification and operation limits; do not invent commands from product names.
+
+For other device families, read the matching Port OS skill guide at
+/docs/for-ai/guides/<guide-id>.md: security (locks, doorbells, security panels),
+kitchen (refrigerators, ovens, cooktops), sensors (air quality, humidity, contact,
+motion, purifiers), trackers (phone, watch, wallet and laptop trackers),
+cloud-drives (iCloud Drive and Photos), model-inference (fal.ai image, speech and
+music generation, which can cost money) and reminders-and-calendars. Unlocking a
+door, disarming a panel, oven heat, deleting files and paid generation runs need
+the customer's confirmation first. Cameras and phone/battery requests keep using
+the references above.
 
 Use host-listed account labels to choose the likely authorized home-device
 connection. If discovery misses a device, check relevant authorized connections

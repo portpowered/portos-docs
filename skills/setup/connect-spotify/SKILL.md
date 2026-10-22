@@ -18,7 +18,7 @@ Link Spotify to Port OS to search music, manage playlists and control Spotify Co
 - **Your own Spotify app** (`customer-oauth`): you create an app in the Spotify developer dashboard and give Port OS its client ID and secret. Available to any account, subject to Spotify's development-mode limits (see Quota and development mode).
 - **Port OS's registration** (`portos-oauth`): Port OS uses its own Spotify app. This is available only to accounts that Port OS has granted access.
 
-The website flow saves first, then authorizes: you save the client ID and secret as a draft connection, then choose Authorize. Nothing is connected until Spotify returns and Port OS completes the link.
+The website flow has two separate steps. First you choose **Save credentials**, which stores the values as this plugin's one configuration. Then, now or in a later session, you choose **Connect to Spotify**. Once a configuration is saved the credential form is hidden and **Connect to Spotify** is the only primary button; open **Auth configuration** underneath to see the Redirect URI, change the saved values (the client secret stays masked) or delete the configuration, which asks you to confirm. Saving again updates the same configuration and never creates a second one, and a failed or cancelled authorization leaves it in place so you can try again. Nothing is connected until Spotify returns and Port OS completes the link.
 
 ## Use your own Spotify app [#customer-oauth]
 
@@ -66,7 +66,7 @@ New apps start in **Development mode**, which only lets accounts you add sign in
 
 ### 8. Enter the credentials in Port OS
 
-Back in Port OS, paste the client ID into **OAuth client ID** and the client secret into **OAuth client secret**, then click **Connect Spotify**. Port OS stores the secret on the backend and never shows it again.
+Back in Port OS, paste the client ID into **OAuth client ID** and the client secret into **OAuth client secret**, then click **Save credentials**. Port OS stores the secret on the backend and never shows it again. The credentials are now saved and nothing is authorized yet: continue with the next step now, or come back later and choose **Connect to Spotify**. You do not need to enter them again.
 
 ### 9. Approve access on Spotify
 
@@ -98,7 +98,7 @@ New Spotify apps start in development mode. Under Spotify's July 2026 update, on
 If your account has been granted Port OS's Spotify registration, the connect screen offers Use Port OS's Spotify app. You do not create a dashboard app or enter a client ID, secret or Redirect URI.
 
 1. Open the Spotify connect screen and choose Use Port OS's Spotify app.
-2. Choose Authorize and approve the requested access on Spotify.
+2. Choose **Connect to Spotify** and approve the requested access on Spotify.
 
 If the option is missing, your account has not been granted access. Use your own Spotify app instead.
 
@@ -108,4 +108,4 @@ If the option is missing, your account has not been granted access. Use your own
 - **Invalid client (`invalid_client`).** The client ID or secret is wrong, or the secret was regenerated. Re-enter both from the dashboard and save again before authorizing.
 - **`AUTH_LINK_NOT_READY`.** The connection is still a draft that is missing required values, usually the client secret. Save both client ID and secret, then authorize.
 - **Spotify refuses sign-in for your account.** The app is in development mode and your Spotify account is not on its allowlist. See Quota and development mode.
-- **Stale callback.** An authorization that was started earlier, or opened twice, can return to Port OS after it expired or was replaced. Close the tab and choose Authorize again to start a fresh attempt; the previous one is not reused.
+- **Stale callback.** An authorization that was started earlier, or opened twice, can return to Port OS after it expired or was replaced. Close the tab and choose **Connect to Spotify** again to start a fresh attempt; the previous one is not reused.

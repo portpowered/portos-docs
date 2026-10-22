@@ -25,7 +25,7 @@ You do not need a separate Port OS password. If someone else needs temporary acc
 Port OS reaches your devices through the accounts you already have with their makers, such as your Spotify or smart home account.
 
 1. Open the [plugin catalog](https://portoperatingsystem.com/plugins/) and choose your provider.
-2. Choose Connect. Sign in on the provider's own page. Port OS never sees your provider password.
+2. Choose **Log in with** your provider, for example **Log in with Sonos**. Sign in on the provider's own page. Port OS never sees your provider password.
 3. Approve the access the provider asks for.
 4. Open [Your devices](https://portoperatingsystem.com/dashboard/) and check that your devices appear.
 

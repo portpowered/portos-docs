@@ -1,6 +1,6 @@
 ---
 author: Port OS Team
-last modified: 2026, october, 20
+last modified: 2026, october, 22
 title: Send commands to an endpoint and read its events
 slug: how-to-use-events-capabilities-and-messages
 description: Use this guide to understand events, capabilities and messages, and how a device state change reaches you.
@@ -50,7 +50,7 @@ Use the [send-message operation](/docs/for-ai/operations/sendMessage.md) for the
 
 Attributes describe observations, such as the power capability's `power` attribute with a value of `ON` or `OFF`. They differ from command messages: accepting `turn-on` does not prove that the endpoint is on. Read the endpoint's reported attributes after dispatch when the connection supports observation.
 
-Events communicate changes through the event transport supported by your client. An incoming command asks an endpoint to act; an outgoing capability message reports an event. Match namespace, version, name and schema when interpreting an event. See [MCP setup](/docs/for-ai/guides/connect-agent.md) and [the API guide](/docs/for-ai/guides/using-the-api.md) for client and transport details.
+Events communicate changes through the event transport supported by your client. An incoming command asks an endpoint to act; an outgoing capability message reports an event. Match namespace, version, name and schema when interpreting an event. See [REST or MCP transport](/docs/for-ai/guides/oauth-discovery.md) and [the API guide](/docs/for-ai/guides/using-the-api.md) for client and transport details.
 
 When a current power observation is unavailable, offer explicit On and Off commands that the endpoint supports rather than inventing a current state. This also applies when a connection normally reports state but a read fails. When power is known, use that observation for the toggle. Keep pending actions, command acceptance and confirmed observations separate; an accepted command with missing readback remains unconfirmed.
 

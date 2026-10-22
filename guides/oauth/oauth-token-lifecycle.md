@@ -1,6 +1,6 @@
 ---
 author: Port OS Team
-last modified: 2026, october, 9
+last modified: 2026, october, 21
 title: Exchange, refresh and revoke scoped OAuth tokens
 description: Use this guide to exchange an authorization code for tokens, refresh them and revoke them.
 guide-id: oauth-token-lifecycle
@@ -37,7 +37,17 @@ const tokens = await tokenResponse.json(); // Store securely; do not print token
 
 Save access_token, refresh_token and returned scope in the connector's secure credential store. Public clients have no client secret. Use Authorization: Bearer <access_token> with REST requests or the MCP HTTP connection, according to that token's resource. A refresh token is never an API credential. [Scopes bound access; resource policies still apply](/docs/for-ai/guides/authorization-rules.md).
 
-Refresh with grant_type=refresh_token, client_id and refresh_token at token_endpoint. The resource parameter is optional for code exchange and refresh: omission inherits the existing grant audience; if supplied, it must match the original resource. Scope may stay the same or narrow; it cannot expand. Credentials rotate: store the newly returned refresh token atomically and stop using the previous one. A revoked or reused refresh token must not be retried in a loop. Reauthorize when the grant no longer permits the intended operation.
+## Confidential clients
+
+A client is confidential unless its token_endpoint_auth_method is none. A confidential client must authenticate on code exchange and on refresh, even when it uses PKCE:
+
+- client_secret_post: add client_secret=<secret> to the form body.
+- client_secret_basic: send Authorization: Basic with the client ID and secret, and leave them out of the form body.
+- private_key_jwt: send client_assertion and client_assertion_type.
+
+Use exactly one method. Missing or wrong credentials return invalid_client: 400 for form credentials, or 401 with WWW-Authenticate: Basic for Basic. Basic and form credentials together return 400 invalid_request. A client without the requested grant returns 400 unauthorized_client. Public clients (none) send no secret and rely on PKCE.
+
+Refresh with grant_type=refresh_token, client_id and refresh_token at token_endpoint; a confidential client also authenticates as above. The resource parameter is optional for code exchange and refresh: omission inherits the existing grant audience; if supplied, it must match the original resource. Scope may stay the same or narrow; it cannot expand. Credentials rotate: store the newly returned refresh token atomically and stop using the previous one. A revoked or reused refresh token must not be retried in a loop. Reauthorize when the grant no longer permits the intended operation.
 
 Revoke by POSTing application/x-www-form-urlencoded token=<refresh_token>&client_id=<client_id> to revocation_endpoint. Revoked grants stop authorizing both access and refresh requests. Removing a local configuration file alone is not server-side revocation.
 

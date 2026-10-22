@@ -18,7 +18,7 @@ Link SmartThings to Port OS to read and control your SmartThings devices. You ca
 - **Your own SmartThings app** (`customer-oauth`): you register an OAuth-In app with the SmartThings CLI and give Port OS its client ID and secret. Available to any account.
 - **Port OS's registration** (`portos-oauth`): Port OS uses its own SmartThings app. This is available only to accounts that Port OS has granted access.
 
-The website flow saves first, then authorizes: you save the client ID and secret as a draft connection, then choose Authorize. Nothing is connected until SmartThings returns and Port OS completes the link.
+The website flow has two separate steps. First you choose **Save credentials**, which stores the values as this plugin's one configuration. Then, now or in a later session, you choose **Connect to SmartThings**. Once a configuration is saved the credential form is hidden and **Connect to SmartThings** is the only primary button; open **Auth configuration** underneath to see the Redirect URI, change the saved values (the client secret stays masked) or delete the configuration, which asks you to confirm. Saving again updates the same configuration and never creates a second one, and a failed or cancelled authorization leaves it in place so you can try again. Nothing is connected until SmartThings returns and Port OS completes the link.
 
 ## Use your own SmartThings app [#customer-oauth]
 
@@ -26,13 +26,7 @@ You register an OAuth-In app with the SmartThings CLI, then give Port OS its cli
 
 ### 1. Install the SmartThings CLI
 
-On macOS, run:
-
-```bash
-brew install smartthingscommunity/smartthings/smartthings
-```
-
-On Windows, download and run `smartthings.msi` from the latest release listed on the [SmartThings CLI page](https://developer.smartthings.com/docs/sdks/cli). On Linux, download the zipped binary from the latest release, extract it and put it on your path. Check the install:
+Download the SmartThings CLI for your system from the [SmartThings CLI releases page](https://github.com/SmartThingsCommunity/smartthings-cli/releases). On Windows, run the `.msi` installer. On macOS or Linux, download the binary or archive, extract it if needed and put it on your path. Check the install:
 
 ```bash
 smartthings --version
@@ -40,7 +34,7 @@ smartthings --version
 
 ### 2. Copy the Redirect URI from Port OS
 
-In Port OS, open **Add a device** and choose SmartThings. Under **How do you want to connect SmartThings?**, choose **Use my own app**. Copy the value under **Redirect URI to register in your SmartThings app** with **Copy redirect URI**. Keep this tab open; you return to it in step 6.
+In Port OS, open **Add a device** and choose SmartThings. Under **How do you want to connect SmartThings?**, choose **Use my own app**. Copy the value under **Redirect URI to register in your SmartThings app** with **Copy redirect URI**. This is the URL of the Port OS setup page; on the hosted service it is `https://auth.portoperatingsystem.com/plugins`. Keep this tab open; you return to it in step 6.
 
 ### 3. Create the app
 
@@ -52,9 +46,9 @@ smartthings apps:create
 
 On the first command, the CLI opens a browser window. Sign in with your Samsung account and grant the CLI access. When asked for the app type, choose **OAuth-In App**.
 
-### 4. Enter the Redirect URI and scopes
+### 4. Set the OAuth redirect URI and scopes
 
-When the CLI asks for the redirect URI, paste the value from step 2. When it asks for scopes, select the four scopes listed under Required scopes.
+When the CLI asks for the redirect URI, paste the Port OS setup page URL from step 2. When it asks for scopes, select the four scopes listed under Required scopes.
 
 ### 5. Copy the client ID and client secret
 
@@ -62,7 +56,7 @@ The CLI prints the app's OAuth client ID and client secret. The secret is shown 
 
 ### 6. Enter the credentials in Port OS
 
-Back in Port OS, enter the client ID in **OAuth client ID** and the secret in **OAuth client secret**, then click **Connect SmartThings**. Port OS stores the secret on the backend and never shows it again.
+Back in Port OS, enter the client ID in **OAuth client ID** and the secret in **OAuth client secret**, then click **Save credentials**. Port OS stores the secret on the backend and never shows it again. The credentials are now saved and nothing is authorized yet: continue with the next step now, or come back later and choose **Connect to SmartThings**. You do not need to enter them again.
 
 ### 7. Approve access on SmartThings
 
@@ -86,7 +80,7 @@ Select these scopes when you register the app:
 If your account has been granted Port OS's SmartThings registration, the connect screen offers a Port OS registration option. You do not register an app or enter a client ID, secret or Redirect URI.
 
 1. Open the SmartThings connect screen and choose the Port OS registration option.
-2. Choose Authorize and approve the requested access on SmartThings.
+2. Choose **Connect to SmartThings** and approve the requested access on SmartThings.
 
 If the option is missing, your account has not been granted access. Use your own SmartThings app instead.
 
@@ -101,4 +95,4 @@ Personal access tokens (PATs) are no longer supported for SmartThings. An old Sm
 - **`AUTH_LINK_NOT_READY`.** The connection is still a draft that is missing required values, usually the client secret. Save both client ID and secret, then authorize.
 - **Missing devices or permission errors.** The app was registered without all four scopes. Update the app's scopes, then delete the connection and connect again.
 - **Connection stops working.** The connection used a personal access token. See Personal access tokens.
-- **Stale callback.** An authorization that was started earlier, or opened twice, can return after it expired or was replaced. Close the tab and choose Authorize again.
+- **Stale callback.** An authorization that was started earlier, or opened twice, can return after it expired or was replaced. Close the tab and choose **Connect to SmartThings** again.

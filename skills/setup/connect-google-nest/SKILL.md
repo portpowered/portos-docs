@@ -18,7 +18,7 @@ Link Google Nest to Port OS to read and control thermostats and to view cameras.
 - **Your own Google Cloud client** (`customer-oauth`): you create a Google Cloud OAuth client and a Device Access project, and give Port OS the client ID, the client secret and the Device Access project ID. Available to any account. Live events are not available on this variant.
 - **Port OS's client** (`portos-oauth`): Port OS uses its own OAuth client and Device Access project. This is available only to accounts that Port OS has granted access, and it includes live events.
 
-The website flow saves first, then authorizes: you save your values as a draft connection, then choose Authorize. Nothing is connected until Google returns and Port OS completes the link.
+The website flow has two separate steps. First you choose **Save credentials**, which stores the values as this plugin's one configuration. Then, now or in a later session, you choose **Connect to Google Nest**. Once a configuration is saved the credential form is hidden and **Connect to Google Nest** is the only primary button; open **Auth configuration** underneath to see the Redirect URI, change the saved values (the client secret stays masked) or delete the configuration, which asks you to confirm. Saving again updates the same configuration and never creates a second one, and a failed or cancelled authorization leaves it in place so you can try again. Nothing is connected until Google Nest returns and Port OS completes the link.
 
 ## Your own Google Cloud client [#customer-oauth]
 
@@ -98,7 +98,7 @@ The project page shows a **Project ID**, a UUID. This is not your Google Cloud p
 
 ### 12. Enter the values in Port OS
 
-Back in Port OS, enter the client ID in **OAuth client ID**, the client secret in **OAuth client secret** and the Project ID in **Device Access project ID**. Click **Connect Google Nest**. Port OS stores the secret on the backend and never shows it again.
+Back in Port OS, enter the client ID in **OAuth client ID**, the client secret in **OAuth client secret** and the Project ID in **Device Access project ID**, then click **Save credentials**. Port OS stores the secret on the backend and never shows it again. The credentials are now saved and nothing is authorized yet: continue with the next step now, or come back later and choose **Connect to Google Nest**. You do not need to enter them again.
 
 ### 13. Approve access on Google
 
@@ -119,7 +119,7 @@ The Authorized redirect URI in Google Cloud must match the value the Port OS con
 If your account has been granted Port OS's Nest client, the connect screen offers a Port OS client option. You do not create a Google Cloud client or a Device Access project. Live events are included.
 
 1. Open the Google Nest connect screen and choose the Port OS client option.
-2. Choose Authorize and approve the requested access on Google.
+2. Choose **Connect to Google Nest** and approve the requested access on Google.
 
 If the option is missing, your account has not been granted access. Use your own Google Cloud client instead.
 
@@ -129,4 +129,4 @@ If the option is missing, your account has not been granted access. Use your own
 - **Invalid client (`invalid_client`).** The client ID or secret is wrong, or the secret was replaced. Re-enter both and save again before authorizing.
 - **The device list fails after you approve.** The Device Access project ID is wrong, or the OAuth client is not linked to that project. Port OS requests the device list when it completes the link, so a wrong project ID fails the connection. Check the project ID and the linked client ID in the Device Access console, then delete the connection and connect again. An account with no devices connects with an empty list; that is not an error.
 - **`AUTH_LINK_NOT_READY`.** The connection is still a draft that is missing required values: the client ID, the client secret or the Device Access project ID. Save all three, then authorize.
-- **Stale callback.** An authorization that was started earlier, or opened twice, can return after it expired or was replaced. Close the tab and choose Authorize again. Changing the Device Access project or client ID on an existing connection means deleting the connection and connecting again; the previous attempt is not reused.
+- **Stale callback.** An authorization that was started earlier, or opened twice, can return after it expired or was replaced. Close the tab and choose **Connect to Google Nest** again. Changing the Device Access project or client ID on an existing connection means deleting the connection and connecting again; the previous attempt is not reused.
