@@ -54,7 +54,7 @@ Compute `endsAt` from the current time plus the minutes asked; the TV ticks it, 
 {"surfaceId":"picks","a2ui":[{"version":"1.0","createSurface":{"surfaceId":"picks","catalogId":"https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json","components":[
  {"id":"root","component":"Column","children":["head","cards"]},
  {"id":"head","component":"Text","text":"## Kettles under $60"},
- {"id":"cards","component":"Row","justify":"spaceEvenly","children":["a","b","c"]},
+ {"id":"cards","component":"Row","children":["a","b","c"]},
  {"id":"a","component":"Card","weight":1,"child":"a-body"},
  {"id":"a-body","component":"Column","align":"center","children":["a-img","a-name","a-price"]},
  {"id":"a-img","component":"Image","url":"https://example.com/kettle-a.jpg","variant":"mediumFeature","fit":"cover","description":"Kettle A"},
