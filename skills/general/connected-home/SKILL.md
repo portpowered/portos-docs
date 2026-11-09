@@ -1,12 +1,12 @@
 ---
 name: connected-home
-description: Use for connected-device requests such as turning off lights or a room switch, lowering the thermostat temperature, checking the temperature right now, vacuuming a room, playing or pausing music on Echo/Alexa, lowering speaker volume, looking at a kitchen camera, finding or pinging a phone, or checking whether a phone/watch is dead or needs charging, locks and doorbells, the fridge or oven, air quality and door/motion sensors, finding a wallet or laptop tracker, iCloud Drive files, AI image or music generation, and reminders or calendars. For a bare temperature question with no indoor/outdoor context, clarify which before assuming weather. Explicit weather forecasts or city temperatures do not require this workflow.
+description: Use for connected-device requests such as turning off lights or a room switch, lowering the thermostat temperature, checking the temperature right now, vacuuming a room, playing or pausing music on Echo/Alexa, lowering speaker volume, looking at a kitchen camera, finding or pinging a phone, or checking whether a phone/watch is dead or needs charging, locks and doorbells, the fridge or oven, air quality and door/motion sensors, finding a wallet or laptop tracker, iCloud Drive files, and reminders or calendars. For a bare temperature question with no indoor/outdoor context, clarify which before assuming weather. Explicit weather forecasts or city temperatures do not require this workflow.
 metadata:
   title: Connected home requests
   guide-id: skill-connected-home
   content-authorship: HUMAN_MIXED_WITH_AI
   author: Port OS Team
-  last modified: 2026, october, 22
+  last modified: 2026, november, 2
 ---
 
 # Connected home requests
@@ -14,55 +14,94 @@ metadata:
 Resolve the customer's intended home task and use the existing Port OS connection.
 Do this workflow in the current chat without delegation.
 
-For "what's the temperature right now?" with no context distinguishing indoor
-temperature from weather, ask whether the customer means indoors or outside.
-Do not require a city/ZIP before resolving that distinction. For explicit indoor
-requests, discover a thermostat/temperature sensor and read ambient temperature;
-a setpoint is not a room measurement. Respect explicit outdoor/weather intent.
+Copy returned resource references unchanged. MCP accepts compact IDs such as
+`me/ep/<base64url UUID>`, `0/ep/<base64url UUID>` and full IDs.
+Capability messages default to `power/turn-off`: system zero and the messages
+path are assumed. Retain `@version` only when discovery includes it; ambiguous
+versions require an explicit choice.
+`me` binds to the current authenticated principal; preserve the account with
+each reference. Do not encode, reconstruct or shorten IDs yourself.
+
+For an ambiguous "what's the temperature right now?", clarify indoors or outside
+before requesting a city/ZIP. Indoors, discover a thermostat/temperature sensor and
+read ambient temperature, never its setpoint. Respect explicit outdoor/weather intent.
+
+Window-covering lift is percent open: position 0 and `liftPercent100thsValue` 0 are
+fully closed, 100 and 10000 fully open. Open a blind to 10000 and close it to 0.
 
 Read the task guide index at `references/index.md` and the relevant bundled reference:
 temperature, lighting, cameras, rooms, media, battery, find-phone, files or reminders.
-These are the same Markdown guides published on the website and exposed as MCP
-resources at portos://guides/{topic}. When references are unavailable, read
-portos://guides/index with resources/read. The guides explain capability selection,
-documented payload fields, verification and operation limits; do not invent commands from product names.
+These same guides are published on the website and at portos://guides/{topic}.
+If references are unavailable and the client exposes resources/read, read portos://guides/index.
+Tools-only clients use control's music, queue and scene recipes. Other payloads require the matching guide; never assume resources/read or guess fields.
+Follow their capability, payload, verification and operation limits; never invent
+commands from product names.
 
-For other device families, read the matching Port OS skill guide at
-/docs/for-ai/guides/<guide-id>.md: security (locks, doorbells, security panels),
-kitchen (refrigerators, ovens, cooktops), sensors (air quality, humidity, contact,
-motion, purifiers), trackers (phone, watch, wallet and laptop trackers),
-cloud-drives (iCloud Drive and Photos), model-inference (fal.ai image, speech and
-music generation, which can cost money) and reminders-and-calendars. Unlocking a
-door, disarming a panel, oven heat, deleting files and paid generation runs need
-the customer's confirmation first. Cameras and phone/battery requests keep using
-the references above.
+Each device family also has its own Port OS skill. When the Port OS plugin is
+installed, use the matching skill alongside this one; otherwise read its guide at
+`https://portoperatingsystem.com/docs/for-ai/guides/{guide-id}.md`. The skills are
+lighting, thermostats, vacuums (rooms and the house map), media, screens (show
+text, images, timers and lists on a TV), cameras,
+security (locks, doorbells, security panels), kitchen (refrigerators, ovens,
+cooktops, pet feeders), sensors (air quality, humidity, contact, motion,
+purifiers), trackers (phone, watch, wallet and laptop trackers), cloud-drives
+(iCloud Drive and Photos) and reminders-and-calendars. For accounts,
+use add-devices, manage-devices, manage-groups, manage-simulators,
+grant-endpoint-permissions and troubleshoot-connections. Unlocking a door,
+disarming a panel, oven heat and deleting files need the customer's
+confirmation first.
 
-Use host-listed account labels to choose the likely authorized home-device
-connection. If discovery misses a device, check relevant authorized connections
-before denying availability. Keep the returning account with every endpoint,
-route and item ID. Ask which account/target before writing when several match.
-Do not create connections or expand permissions just to resolve discovery.
+Choose authorized connections by host-listed account labels. Before denying a
+missing device, check relevant authorized connections. Preserve the returning account
+with each endpoint, route and item ID; clarify multiple matches before writing.
+Discovery never justifies creating connections or expanding permissions.
 
-For phone/watch battery, charging or Find My requests, inspect every matching
-candidate's routes before choosing an exact endpoint. Prefer the concrete device
-with an authorized Apple iCloud route for Apple Find My, rather than the first
-matching name, an Alexa proxy, a generic plugin or an old unrouted record. If a
-same-name record has unavailable data, continue to the relevant route-backed
-candidate before claiming iCloud has no reading. Preserve old records; discovery
-does not authorize deleting or merging them.
+Treat simulated devices like any other device. Before reporting absence, check the
+other relevant authorized accounts. If the customer explicitly names an account,
+keep that scope. If several devices still match, identify them by account and name;
+clarify the target before a write. Never move a `me` reference between accounts.
 
-Use declared endpoint_query expansions with forceDeviceAttributeQuery:true for
-current state. Missing, stale or unavailable readings mean current state is
-unknown. Inspect camera snapshot pixels before describing a scene. Accepted
-control alone does not confirm a physical outcome; verify fresh observations and
-do not automatically repeat state changes.
+For phone/watch battery, charging or Find My, inspect every matching candidate's
+routes. Choose a concrete authorized Apple iCloud endpoint for Apple Find My.
+A name, Alexa proxy, generic plugin or old unrouted record cannot establish that scope. If one
+match lacks data, check other route-backed candidates before denying an iCloud
+reading. Discovery never authorizes deleting or merging old records.
 
-For cameras that declare RTC streaming but no on-demand snapshot, prefer the
-embedded endpoint_show panel's supported live-view control. Showing a panel does
-not establish that video started or that you inspected it. If the host cannot
-operate or inspect the embedded viewer, report that limitation. A separate
-website may use a different signed-in account; its missing-device result does
-not establish that the MCP account lacks the camera.
+Read current state with declared endpoint_query expansions and
+forceDeviceAttributeQuery:true. Report STALE as last known state with sampledAt,
+never live or unknown; it cannot substantiate safety claims such as locked/off. Errored, missing, invalid or
+PROVIDER_NO_STATE readings mean unknown. PROVIDER_NO_STATE means the provider
+replied without an attribute value; this does not establish offline state: send the requested command once
+and report unconfirmed. Only UNREACHABLE or ENDPOINT_UNREACHABLE (423) means offline
+and rejected. Inspect snapshot pixels before describing a scene.
+Prefer one control call for a resolved action: a compact query for a whole-home
+selection or the logical group for a room. Reuse established scope and declarations;
+discover missing context only. Ordinary response-less writes use waitForResult:false.
+Report accepted/pending and stop; do not automatically poll or reread state.
+Wait for requested data such as snapshots, SDP, searches and queue contents.
+Fresh-read when the user asks for state/verification, a relative action needs a
+current value, or an uncertain result needs diagnosis. Acceptance never proves a
+physical outcome; never automatically repeat state changes.
+
+Before room changes, read the rooms reference and
+[group workflow](/docs/for-ai/guides/managing-groups.md). Use current group IDs and
+starting etags; MOVE_MEMBER needs both group references. BEST_EFFORT can change
+providers before local intent: inspect partial results and providerDispatches.
+Deletion disables unretired routes, preventing rediscovery from restoring the group.
+
+Use endpoint_show when the user requests a card, map or device controls. It is
+not an automatic follow-up to a command. A single exact endpointId opens the
+device; a multi-device query opens a name list. Never draw a replacement card.
+
+For RTC cameras without on-demand snapshots, prefer the embedded endpoint_show
+live-view control. Showing a panel proves neither started video nor inspection.
+Report inability to operate or inspect it. A separate website may use another
+account; its missing-device result does not prove absence from the MCP account.
 
 Explain results and needed clarification in plain customer language. Do not
 explain that an internal skill requires a question.
+
+Respect scopes: reads need `endpoint:read`/`group:read`, control `message:send`,
+`endpoint_manage` `endpoint:write`, and `group_manage` `group:manage`. On
+`insufficient_scope` (403), never retry; request reconnection or approval of the named
+scope. See first-setup's "Scopes for setup".

@@ -2,14 +2,14 @@
 // Validates the exported Port OS docs tree: guide frontmatter, skills and relative links.
 // Copied to scripts/validate.mjs in the public docs repository. Uses only Node built-ins.
 //
-//   guides/<group>/<guide-id>.md            plain guides (oauth, connect-ai, api)
+//   guides/<group>/<guide-id>.md            plain guides (oauth, api)
 //   skills/<category>/<name>/SKILL.md       skills (setup, general, devices): each is a website guide and an Agent Skill
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const authorships = ['HUMAN', 'AI', 'HUMAN_MIXED_WITH_AI'];
-const groups = ['oauth', 'connect-ai', 'api'];
+const groups = ['oauth', 'api'];
 const categories = ['setup', 'general', 'devices'];
 // Agent Skills top-level fields; the guide fields live in a string-valued metadata map.
 const skillFields = ['name', 'description', 'license', 'compatibility', 'allowed-tools', 'metadata'];

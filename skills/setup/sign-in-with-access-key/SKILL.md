@@ -6,7 +6,7 @@ metadata:
   guide-id: access-key-sign-in
   content-authorship: HUMAN_MIXED_WITH_AI
   author: Port OS Team
-  last modified: 2026, october, 14
+  last modified: 2026, october, 28
 ---
 
 # Sign in with a website access key
@@ -20,8 +20,7 @@ dedicated account with sample devices and no access to your household.
 
 1. Sign in to Port OS with Google.
 2. Open Tokens and select Create access key.
-3. Choose Website sign-in, enter a name, and choose an expiry of one hour, one
-   day or seven days.
+3. Choose Website sign-in, name the key and select 1 hour, 1 day, 7 days or 24 days.
 4. Create the key and copy it. Port OS shows it only once.
 
 Keep the key private. Send reviewer credentials through the platform's private

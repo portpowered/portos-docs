@@ -58,5 +58,5 @@ You can allow some access and refuse the rest. For example, let your AI list you
 Building your own app or client? See the OAuth guides for developers:
 
 - [Set up an OAuth client](https://portoperatingsystem.com/docs/user-guides/how-to-set-up-an-oauth-client-for-port-os/)
-- [Register a client with DCR or CIMD](https://portoperatingsystem.com/docs/user-guides/how-to-register-an-oauth-client/)
+- [Register a client with DCR or CIMD](https://portoperatingsystem.com/docs/user-guides/how-to-set-up-an-oauth-client-for-port-os/)
 - [Scopes and authorization rules](https://portoperatingsystem.com/docs/user-guides/how-to-set-up-access-rules-for-port-os/)

@@ -21,3 +21,19 @@ Enumerate first. An empty inventory means the account has no visible devices, no
 
 If authorization expires, refresh within the original grant or ask the user to authorize again. Confirm grant revocation in account settings or the documented revocation endpoint. Revoking a website access key stops that key's sign-in and API use. An OAuth connection already approved with it is a separate grant that the customer revokes separately. See [troubleshooting](/docs/for-ai/guides/troubleshooting.md).
 
+## Scopes for setup
+
+Request scopes when you connect (the DCR `scope` field or the connector's scopes). A connection can hold only what the client requested and the user left checked at consent, so a connection made with too few scopes fails setup tasks later.
+
+| Task | Scope |
+| --- | --- |
+| List and inspect devices | `endpoint:read` |
+| List and inspect rooms and groups | `group:read` |
+| Control a device (send a command) | `message:send` |
+| Rename, enable/disable or delete a device (`endpoint_manage`) | `endpoint:write` |
+| Create, edit or delete rooms and groups (`group_manage`) | `group:manage` |
+| List event subscriptions / create or delete them | `subscription:read` / `subscription:write` |
+
+For full setup request `endpoint:read endpoint:write message:send group:read group:manage`, and add `subscription:read subscription:write` when the customer wants event subscriptions. A registration that names no scope receives only `endpoint:read`.
+
+On a 403 with `error="insufficient_scope"` (`WWW-Authenticate` header) or error code `INSUFFICIENT_SCOPE`, do not retry. The `scope` value names the missing scope. Ask the customer to reconnect or approve that scope, then repeat the task once access is granted.

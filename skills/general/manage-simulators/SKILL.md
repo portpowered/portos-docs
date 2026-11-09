@@ -22,7 +22,7 @@ Test device control without physical hardware. Sign in to Port OS before you sta
 
 ## Control the device
 
-Use the endpoint power control to turn the light on or off. Read its returned power value to check the result. You can also use the simulator endpoint in the [Quick start](https://portoperatingsystem.com/docs/getting-started/) or connect an [AI client](https://portoperatingsystem.com/connect-ai/).
+Use the endpoint power control to turn the light on or off. Read its returned power value to check the result. A simulated vacuum comes with rooms (Living room, Kitchen, Bedroom, Hallway unless you list your own) that you can clean one by one with clean-room. You can also use the simulator endpoint in the [Quick start](https://portoperatingsystem.com/docs/getting-started/) or connect an [AI client](https://portoperatingsystem.com/connect-ai/).
 
 ## Edit or remove a simulator
 

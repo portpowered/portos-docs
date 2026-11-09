@@ -38,13 +38,14 @@ A message has a header identifying its capability namespace and message name, an
 {
   "header": {
     "namespace": "port1/systems/zero/capability-interfaces/power",
-    "name": "turn-on"
+    "name": "turn-on",
+    "version": "1.0"
   },
   "body": {}
 }
 ```
 
-Use the [send-message operation](/docs/for-ai/operations/sendMessage.md) for the enclosing request and target format. Choose the full endpoint ID returned by discovery. Dispatch only a supported message to an endpoint you intend to operate.
+Use the [message-request operation](/docs/for-ai/operations/upsertMessageRequest.md) for the enclosing request and target format. Choose the full endpoint ID returned by discovery. Dispatch only a supported message to an endpoint you intend to operate.
 
 ## Read attributes and events
 

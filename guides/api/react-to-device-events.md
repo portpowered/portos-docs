@@ -1,6 +1,6 @@
 ---
 author: Port OS Team
-last modified: 2026, october, 20
+last modified: 2026, october, 27
 title: How to react to device events
 description: Use this guide when an application or agent needs to react when a device changes state.
 guide-id: react-to-device-events
@@ -51,9 +51,10 @@ Use these operations to manage subscriptions from your own application. Each one
 | Operation | Request | What it does |
 | --- | --- | --- |
 | `enumerateSubscriptions` | `GET /subscriptions` | Lists subscriptions, or reads one when you pass `id`. |
-| `upsertSubscription` | `POST /subscriptions` | Creates or updates a subscription. A subscription has a `query` that selects events and a `target` that receives them. |
-| `patchSubscription` | `PATCH /{namespace}/{principalType}/{principalId}/subscriptions/{subscriptionId}` | Renames a subscription. |
+| `upsertSubscription` | `POST /subscriptions` | Creates with a server-assigned ID when `id` is omitted, or fully replaces an existing subscription with `If-Match`. Include its whole writable document to rename it. |
 | `deleteSubscription` | `DELETE /{namespace}/{principalType}/{principalId}/subscriptions/{subscriptionId}` | Stops a subscription. |
+
+Every write requires `Idempotency-Key`; reuse the same key for a retry within 24 hours. Read the current `etag` and send it in `If-Match` when replacing or deleting. Missing preconditions return 428 and stale versions return 412.
 
 A subscription can include a `context` filter. Each key is a path into the message, such as `header.namespace` or `header.name`, and each value is what the message must contain. A subscription fires only when every entry matches. Leave `context` out to receive every event.
 
